@@ -1,0 +1,32 @@
+[
+  {
+    "name": "ema-cross",
+    "title": "EMA-Cross Events",
+    "descriptions": "Detects crosses for EMA lines.",
+    "entry": "./cmd/ema-cross"
+  },
+  {
+    "name": "macd-cross",
+    "title": "MACD-Cross Events",
+    "descriptions": "Detects crosses for MACD lines.",
+    "entry": "./cmd/macd-cross"
+  },
+  {
+    "name": "obv-cross",
+    "title": "OBV-Cross Events",
+    "descriptions": "Detects crosses for OBV lines.",
+    "entry": "./cmd/obv-cross"
+  },
+  {
+    "name": "rsi-levels",
+    "title": "RSI Over-/Undersold Events",
+    "descriptions": "Detects oversold and undersold events for rsi.",
+    "entry": "./cmd/rsi-levels"
+  },
+  {
+    "name": "bollinger-bands",
+    "title": "Bollinger Band Events",
+    "descriptions": "Events where the candle goes outside of the bollinger bands.",
+    "entry": "./cmd/bollinger-bands"
+  }
+]

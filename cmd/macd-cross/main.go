@@ -31,18 +31,16 @@ func Evaluate(chart simulated.MarketSupplier, res *algo.ResultHandler, mem *simu
 	}
 	defer mem.Store(store)
 
-	ema10 := chart.Interval(candles.Interval1d).Indicator("ema", 10).Value()
-	ema50 := chart.Interval(candles.Interval1d).Indicator("ema", 50).Value()
+	macd := chart.Interval(candles.Interval1d).Indicator("macd", 0).Series("macd")
+	signal := chart.Interval(candles.Interval1d).Indicator("macd", 0).Series("signal")
 
-	// check current trend state based on ema
 	var nextState CrossState
-	if ema50 > ema10 {
+	if signal > macd {
 		nextState = StateDownTrend
 	} else {
 		nextState = StateUpTrend
 	}
 
-	// handle any trend flips
 	switch store.State {
 	case StateUpTrend:
 		if nextState == StateDownTrend {
@@ -54,12 +52,9 @@ func Evaluate(chart simulated.MarketSupplier, res *algo.ResultHandler, mem *simu
 		}
 	}
 
-	// store next state as current state
 	store.State = nextState
-
 }
 
-// Run a server to use this algorithm in headless mode
 func main() {
 	ritmic.Serve(Evaluate, Params)
 }
