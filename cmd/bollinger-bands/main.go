@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/godoji/algocore/pkg/algo"
+	"github.com/godoji/algocore/pkg/env"
 	"github.com/godoji/algocore/pkg/ritmic"
-	"github.com/godoji/algocore/pkg/simulated"
 	candles "github.com/northberg/candlestick"
 )
 
@@ -21,7 +21,7 @@ type LocalStore struct {
 	State CrossState
 }
 
-func Evaluate(chart simulated.MarketSupplier, res *algo.ResultHandler, mem *simulated.Memory, param simulated.Parameters) {
+func Evaluate(chart env.MarketSupplier, res *algo.ResultHandler, mem *env.Memory, param env.Parameters) {
 
 	var store *LocalStore
 	if tmp := mem.Read(); tmp == nil {
