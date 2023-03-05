@@ -28,5 +28,11 @@
     "title": "Bollinger Band Events",
     "descriptions": "Events where the candle goes outside of the bollinger bands.",
     "entry": "./cmd/bollinger-bands"
+  },
+  {
+    "name": "support-resistance",
+    "title": "Support and Resistances Levels",
+    "descriptions": "Find lines that are common resistance of resistance zones.",
+    "entry": "./cmd/resistance-lines"
   }
 ]

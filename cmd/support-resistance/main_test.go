@@ -5,6 +5,6 @@ import (
 	"testing"
 )
 
-func TestMACDCross(t *testing.T) {
+func TestSupportResistance(t *testing.T) {
 	ritmic.RunTestShort(Evaluate, [][]float64{{}}, Params)
 }

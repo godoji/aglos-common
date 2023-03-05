@@ -6,5 +6,5 @@ import (
 )
 
 func TestRSILevels(t *testing.T) {
-	ritmic.RunShortTestSet(Evaluate, [][]float64{{}}, Params)
+	ritmic.RunTestShort(Evaluate, [][]float64{{}}, Params)
 }
