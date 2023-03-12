@@ -3,7 +3,7 @@ module github.com/godoji/common-algorithms
 go 1.19
 
 require (
-	github.com/godoji/algocore v0.1.0
+	github.com/godoji/algocore v0.1.3
 	github.com/northberg/candlestick v0.2.6
 )
 

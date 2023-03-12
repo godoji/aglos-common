@@ -6,5 +6,5 @@ import (
 )
 
 func TestSupportResistance(t *testing.T) {
-	ritmic.RunTestShort(Evaluate, [][]float64{{}}, Params)
+	ritmic.RunTestShort(Evaluate, [][]float64{{200}}, Params)
 }
