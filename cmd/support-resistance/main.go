@@ -5,7 +5,6 @@ import (
 	"github.com/godoji/algocore/pkg/env"
 	"github.com/godoji/algocore/pkg/ritmic"
 	candles "github.com/northberg/candlestick"
-	"log"
 	"math"
 	"sort"
 )
@@ -28,45 +27,63 @@ func Evaluate(chart env.MarketSupplier, res *algo.ResultHandler, mem *env.Memory
 	}
 	defer mem.Store(store)
 
-	// Initialize any memory, or append
 	if !store.Initialized {
 		histSize := param.GetInt("historySize")
 		store.History = env.NewFiLoStack(histSize)
-		for i := 0; i < histSize; i++ {
-			c := chart.Interval(candles.Interval1d).FromLast(i)
-			store.History.Push(c)
-		}
 		store.Initialized = true
-	} else {
+	}
+
+	// Add candle to stack
+	{
 		c := chart.Interval(candles.Interval1d).Candle()
 		store.History.Push(c)
 	}
 
 	// Calculate local maxima
-	values := make([]float64, 0)
+	weights := make(map[float64]float64, 0)
 	for _, i := range store.History.ToSlice() {
+		if i == nil {
+			break
+		}
 		c := i.(*candles.Candle)
 		if !c.Missing {
-			values = append(values, c.High, c.Low)
+			if _, ok := weights[c.High]; ok {
+				weights[c.High] += c.Volume
+			} else {
+				weights[c.High] = c.Volume
+			}
+			if _, ok := weights[c.Low]; ok {
+				weights[c.Low] += c.Volume
+			} else {
+				weights[c.Low] = c.Volume
+			}
 		}
 	}
 
-	if len(values) < 100 {
+	if len(weights) < 50 {
 		return
 	}
 
+	values := make([]float64, len(weights))
+	{
+		i := 0
+		for v := range weights {
+			values[i] = v
+			i++
+		}
+	}
 	sort.Float64s(values)
 
 	// Create some events
 	centroids := make([]*Centroid, 0)
-	k := 5
+	k := 4
 	step := len(values) / k
-	for i := 0; i < 5; i++ {
+	for i := 0; i < k; i++ {
 		pseudoRandomIndex := i * step
 		centroids = append(centroids, NewCentroid(values[pseudoRandomIndex]))
 	}
 
-	iterations := 10
+	iterations := 20
 	for i := 0; i < iterations; i++ {
 		for _, v := range values {
 			lowestDist := math.MaxFloat64
@@ -82,7 +99,7 @@ func Evaluate(chart env.MarketSupplier, res *algo.ResultHandler, mem *env.Memory
 		}
 		newCentroids := make([]*Centroid, 0)
 		for _, centroid := range centroids {
-			newCentroids = append(newCentroids, NewCentroid(centroid.Mean()))
+			newCentroids = append(newCentroids, NewCentroid(centroid.Mean(weights)))
 		}
 		centroids = newCentroids
 	}
@@ -95,7 +112,6 @@ func Evaluate(chart env.MarketSupplier, res *algo.ResultHandler, mem *env.Memory
 type Centroid struct {
 	values         []float64
 	representative float64
-	sum            float64
 	size           int
 }
 
@@ -103,14 +119,12 @@ func NewCentroid(v float64) *Centroid {
 	return &Centroid{
 		values:         make([]float64, 0),
 		representative: v,
-		sum:            0,
 		size:           0,
 	}
 }
 
 func (c *Centroid) Add(v float64) {
 	c.values = append(c.values, v)
-	c.sum += v
 	c.size++
 }
 
@@ -118,11 +132,20 @@ func (c *Centroid) Center() float64 {
 	return c.representative
 }
 
-func (c *Centroid) Mean() float64 {
+func (c *Centroid) Mean(weights map[float64]float64) float64 {
 	if c.size == 0 {
-		log.Fatalln("invalid mean size")
+		return 0
 	}
-	return c.sum / float64(c.size)
+	sumWeights := 0.0
+	for _, v := range c.values {
+		sumWeights += weights[v]
+	}
+	total := 0.0
+	for _, v := range c.values {
+		part := weights[v] / sumWeights
+		total += v * part
+	}
+	return total
 }
 
 func main() {
