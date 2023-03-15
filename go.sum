@@ -23,6 +23,10 @@ github.com/godoji/algocore v0.1.2 h1:LMdb1wBNzw3LWCb3Yk25iw7iBMILlxmyt5pVa6tFE70
 github.com/godoji/algocore v0.1.2/go.mod h1:EL1chxI1I06kyH8H9gooN3y3FGWJ7az9zMjhKmSjGEM=
 github.com/godoji/algocore v0.1.3 h1:RPogtm8Kt72G4WPYXrDBNHoq77d6cFMlHwNJLtWFwQw=
 github.com/godoji/algocore v0.1.3/go.mod h1:EL1chxI1I06kyH8H9gooN3y3FGWJ7az9zMjhKmSjGEM=
+github.com/godoji/algocore v0.1.4 h1:Jr40FIyk4yQyzeGJbRa35ysEScBAox6oR2Z6V3fsgrc=
+github.com/godoji/algocore v0.1.4/go.mod h1:EL1chxI1I06kyH8H9gooN3y3FGWJ7az9zMjhKmSjGEM=
+github.com/godoji/algocore v0.2.1 h1:UgUXYTv0vSjq6Fm+1/fA15nfoX4RctYOzSnwWxu4TUo=
+github.com/godoji/algocore v0.2.1/go.mod h1:EL1chxI1I06kyH8H9gooN3y3FGWJ7az9zMjhKmSjGEM=
 github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b h1:VKtxabqXZkF25pY9ekfRL6a582T4P37/31XEstQ5p58=
 github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b/go.mod h1:SBH7ygxi8pfUlaOkMMuAQtPIUF8ecWP5IEl/CR7VP2Q=
 github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=

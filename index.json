@@ -35,7 +35,16 @@
     "descriptions": "Find lines that are common resistance of resistance zones.",
     "entry": "./cmd/support-resistance",
     "defaultParameters": [
-      60
+      90
+    ]
+  },
+  {
+    "name": "highs-and-lows",
+    "title": "High and Lows",
+    "descriptions": "Local maxima and minima based on high and low prices.",
+    "entry": "./cmd/highs-and-lows",
+    "defaultParameters": [
+      7
     ]
   }
 ]
