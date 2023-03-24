@@ -40,13 +40,28 @@ func Evaluate(chart env.MarketSupplier, res *algo.ResultHandler, mem *env.Memory
 	}
 
 	candidate := store.History.At(histSize / 2).(*candles.Candle)
+
+	isHigh := true
 	for _, candle := range store.History.ToSlice() {
 		if candidate.High < candle.(*candles.Candle).High {
-			return
+			isHigh = false
+			break
 		}
 	}
+	if isHigh {
+		res.NewEvent("high").SetPrice(candidate.High).SetTime(candidate.Time).SetColor("green").SetIcon("top")
+	}
 
-	res.NewEvent("high").SetPrice(candidate.High).SetTime(candidate.Time).SetColor("green").SetIcon("top")
+	isLow := true
+	for _, candle := range store.History.ToSlice() {
+		if candidate.Low > candle.(*candles.Candle).Low {
+			isLow = false
+			break
+		}
+	}
+	if isLow {
+		res.NewEvent("low").SetPrice(candidate.Low).SetTime(candidate.Time).SetColor("red").SetIcon("bottom")
+	}
 }
 
 func main() {
