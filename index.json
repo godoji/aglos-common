@@ -55,5 +55,14 @@
     "defaultParameters": [
       7
     ]
+  },
+  {
+    "name": "double-bottom",
+    "title": "Double Bottom",
+    "descriptions": "Detects double bottom patterns.",
+    "entry": "./cmd/double-bottom",
+    "defaultParameters": [
+      7
+    ]
   }
 ]

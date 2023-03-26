@@ -41,36 +41,36 @@ func Evaluate(chart env.MarketSupplier, res *algo.ResultHandler, mem *env.Memory
 		return
 	}
 
-	t1 := store.History.At(0).(*algo.Event)
-	b1 := store.History.At(1).(*algo.Event)
-	t2 := store.History.At(2).(*algo.Event)
+	b1 := store.History.At(0).(*algo.Event)
+	t1 := store.History.At(1).(*algo.Event)
+	b2 := store.History.At(2).(*algo.Event)
 
-	maxTop := math.Max(t1.Price, t2.Price)
+	supportPrice := math.Min(b1.Price, b2.Price)
 
-	if !(t1.Label == "high" && b1.Label == "low" && t2.Label == "high") {
+	if !(b1.Label == "low" && t1.Label == "high" && b2.Label == "low") {
 		return
 	}
 
-	if t1.Price > t2.Price*1.01 || t1.Price < t2.Price/1.01 {
+	if b1.Price > b2.Price*1.01 || b1.Price < b2.Price/1.01 {
 		return
 	}
 
 	ch := chart.Interval(candlestick.Interval1d)
-	leftIndex := ch.ToIndex(t1.Time)
-	rightIndex := ch.ToIndex(t2.Time)
+	leftIndex := ch.ToIndex(b1.Time)
+	rightIndex := ch.ToIndex(b2.Time)
 
 	for i := rightIndex; i <= leftIndex; i++ {
 		c := ch.FromLast(int(i))
-		if c.Time == t1.Time || c.Time == t2.Time || c.Time == b1.Time {
+		if c.Time == b1.Time || c.Time == b2.Time || c.Time == t1.Time {
 			continue
 		}
 		if c.Missing {
 			continue
 		}
-		if c.High > maxTop {
+		if c.High > t1.Price {
 			return
 		}
-		if c.Low < b1.Price {
+		if c.Low < supportPrice {
 			return
 		}
 	}
@@ -82,10 +82,10 @@ func Evaluate(chart env.MarketSupplier, res *algo.ResultHandler, mem *env.Memory
 		if c.Missing {
 			continue
 		}
-		if c.High >= maxTop {
+		if c.Low <= supportPrice {
 			break
 		}
-		if c.Low <= b1.Price*1.01 {
+		if c.High >= t1.Price/1.01 {
 			leftCandle = c
 			break
 		}
@@ -104,10 +104,10 @@ func Evaluate(chart env.MarketSupplier, res *algo.ResultHandler, mem *env.Memory
 		if c.Missing {
 			continue
 		}
-		if c.High >= maxTop {
+		if c.Low <= supportPrice {
 			break
 		}
-		if c.Low <= b1.Price*1.01 {
+		if c.High >= t1.Price/1.01 {
 			rightCandle = c
 			break
 		}
@@ -116,18 +116,18 @@ func Evaluate(chart env.MarketSupplier, res *algo.ResultHandler, mem *env.Memory
 		return
 	}
 
-	event := res.NewEvent("double-top")
+	event := res.NewEvent("double-bottom")
 	event.AddSegment(&algo.SegmentAnnotation{
 		TimeBegin:  leftCandle.Time,
 		TimeEnd:    rightCandle.Time,
-		PriceBegin: b1.Price,
-		PriceEnd:   maxTop,
+		PriceBegin: t1.Price,
+		PriceEnd:   supportPrice,
 		Style:      "region",
 		Color:      "rgb(100,100,100)",
 	})
-	event.AddEvent(t1, "t1")
 	event.AddEvent(b1, "b1")
-	event.AddEvent(t2, "t2")
+	event.AddEvent(t1, "t1")
+	event.AddEvent(b2, "b2")
 	store.History.Clear()
 }
 
