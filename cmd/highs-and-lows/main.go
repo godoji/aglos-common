@@ -43,7 +43,14 @@ func Evaluate(chart env.MarketSupplier, res *algo.ResultHandler, mem *env.Memory
 
 	isHigh := true
 	for _, candle := range store.History.ToSlice() {
-		if candidate.High < candle.(*candles.Candle).High {
+		c := candle.(*candles.Candle)
+		if c.Time == candidate.Time {
+			continue
+		}
+		if candidate.High <= c.High {
+			if c.High == candidate.High && c.Low < candidate.Low {
+				continue
+			}
 			isHigh = false
 			break
 		}
@@ -54,7 +61,14 @@ func Evaluate(chart env.MarketSupplier, res *algo.ResultHandler, mem *env.Memory
 
 	isLow := true
 	for _, candle := range store.History.ToSlice() {
-		if candidate.Low > candle.(*candles.Candle).Low {
+		c := candle.(*candles.Candle)
+		if c.Time == candidate.Time {
+			continue
+		}
+		if candidate.Low >= c.Low {
+			if c.Low == candidate.Low && c.High > candidate.High {
+				continue
+			}
 			isLow = false
 			break
 		}

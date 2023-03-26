@@ -46,5 +46,14 @@
     "defaultParameters": [
       7
     ]
+  },
+  {
+    "name": "double-top",
+    "title": "Double Top",
+    "descriptions": "Detects double top patterns.",
+    "entry": "./cmd/double-top",
+    "defaultParameters": [
+      7
+    ]
   }
 ]
