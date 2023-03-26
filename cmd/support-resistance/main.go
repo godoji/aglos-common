@@ -16,6 +16,12 @@ type LocalStore struct {
 	History     *env.FiLoStack
 }
 
+type PriceVolumePair struct {
+	Price  float64
+	Volume float64
+	Time   int64
+}
+
 func Evaluate(chart env.MarketSupplier, res *algo.ResultHandler, mem *env.Memory, param env.Parameters) {
 
 	// A way of loading memory from disk
@@ -33,10 +39,20 @@ func Evaluate(chart env.MarketSupplier, res *algo.ResultHandler, mem *env.Memory
 		store.Initialized = true
 	}
 
-	// Add candle to stack
-	{
-		c := chart.Interval(candles.Interval1d).Candle()
-		store.History.Push(c)
+	highsAndLows := chart.Algorithm("highs-and-lows", 7)
+	if highsAndLows.HasEvents() {
+		for _, event := range highsAndLows.CurrentEvents() {
+			vol := 0.0
+			for i := 0; i < 7; i++ {
+				vol += chart.Interval(candles.Interval1d).FromLast(0).Volume
+			}
+			res.NewEvent("high").SetPrice(event.Price).SetTime(event.Time).SetColor("green").SetIcon("top")
+			store.History.Push(&PriceVolumePair{
+				Price:  event.Price,
+				Volume: vol,
+				Time:   event.Time,
+			})
+		}
 	}
 
 	// Calculate local maxima
@@ -45,22 +61,18 @@ func Evaluate(chart env.MarketSupplier, res *algo.ResultHandler, mem *env.Memory
 		if i == nil {
 			break
 		}
-		c := i.(*candles.Candle)
-		if !c.Missing {
-			if _, ok := weights[c.High]; ok {
-				weights[c.High] += c.Volume
-			} else {
-				weights[c.High] = c.Volume
-			}
-			if _, ok := weights[c.Low]; ok {
-				weights[c.Low] += c.Volume
-			} else {
-				weights[c.Low] = c.Volume
-			}
+		c := i.(*PriceVolumePair)
+		if chart.Time()-c.Time > 90*candles.Interval1d {
+			continue
+		}
+		if _, ok := weights[c.Price]; ok {
+			weights[c.Price] += c.Volume
+		} else {
+			weights[c.Price] = c.Volume
 		}
 	}
 
-	if len(weights) < 50 {
+	if len(weights) == 0 {
 		return
 	}
 
@@ -83,7 +95,7 @@ func Evaluate(chart env.MarketSupplier, res *algo.ResultHandler, mem *env.Memory
 		centroids = append(centroids, NewCentroid(values[pseudoRandomIndex]))
 	}
 
-	iterations := 20
+	iterations := 10
 	for i := 0; i < iterations; i++ {
 		for _, v := range values {
 			lowestDist := math.MaxFloat64
@@ -105,7 +117,14 @@ func Evaluate(chart env.MarketSupplier, res *algo.ResultHandler, mem *env.Memory
 	}
 
 	for _, cluster := range centroids {
-		res.NewEvent("level").SetColor("blue").SetIcon("h").SetPrice(cluster.Center())
+		res.NewEvent("level").AddSegment(&algo.SegmentAnnotation{
+			TimeBegin:  chart.Time(),
+			TimeEnd:    chart.Time() + 180*candles.Interval1d,
+			PriceBegin: cluster.Center(),
+			PriceEnd:   cluster.Center(),
+			Style:      "solid",
+			Color:      "rgba(255,255,255,0.025)",
+		})
 	}
 }
 
