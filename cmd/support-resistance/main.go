@@ -41,7 +41,7 @@ func Evaluate(chart env.MarketSupplier, res *algo.ResultHandler, mem *env.Memory
 
 	highsAndLows := chart.Algorithm("highs-and-lows", 7)
 	if highsAndLows.HasEvents() {
-		for _, event := range highsAndLows.CurrentEvents() {
+		for _, event := range highsAndLows.LastEvents() {
 			vol := 0.0
 			for i := 0; i < 7; i++ {
 				vol += chart.Interval(candles.Interval1d).FromLast(0).Volume

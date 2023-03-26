@@ -33,7 +33,7 @@ func Evaluate(chart env.MarketSupplier, res *algo.ResultHandler, mem *env.Memory
 
 	highsAndLows := chart.Algorithm("highs-and-lows", param.Get("historySize"))
 	if highsAndLows.HasEvents() {
-		lastEvent := highsAndLows.CurrentEvents()[0]
+		lastEvent := highsAndLows.LastEvents()[0]
 		store.History.Push(lastEvent)
 	}
 
