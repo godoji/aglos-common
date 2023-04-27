@@ -3,8 +3,8 @@ module github.com/godoji/common-algorithms
 go 1.19
 
 require (
-	github.com/godoji/algocore v0.4.0
-	github.com/northberg/candlestick v0.2.6
+	github.com/godoji/algocore v0.4.4
+	github.com/northberg/candlestick v0.4.0
 )
 
 require (
