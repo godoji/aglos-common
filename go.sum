@@ -13,6 +13,8 @@ github.com/dustin/go-humanize v1.0.0 h1:VSnTsYCnlFHaM2/igO1h6X3HA71jcobQuxemgkq4
 github.com/dustin/go-humanize v1.0.0/go.mod h1:HtrtbFcZ19U5GC7JDqmcUSB87Iq5E25KnS6fMYU6eOk=
 github.com/godoji/algocore v0.4.4 h1:gUae6rfm4OB4q+cL2vDHsEW8QmqA6Zsn8gY9VcOe35w=
 github.com/godoji/algocore v0.4.4/go.mod h1:VbBdFv/ZXlh3xi6k/83GA+DlwTfqyq9AR8cfUiHgt/w=
+github.com/godoji/algocore v0.5.0 h1:Sqms32FnC0nftrY8GBkQ4UERX/1x6DkYdThKoGPZf0w=
+github.com/godoji/algocore v0.5.0/go.mod h1:VbBdFv/ZXlh3xi6k/83GA+DlwTfqyq9AR8cfUiHgt/w=
 github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b h1:VKtxabqXZkF25pY9ekfRL6a582T4P37/31XEstQ5p58=
 github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b/go.mod h1:SBH7ygxi8pfUlaOkMMuAQtPIUF8ecWP5IEl/CR7VP2Q=
 github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=

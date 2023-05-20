@@ -64,5 +64,23 @@
     "defaultParameters": [
       7
     ]
+  },
+  {
+    "name": "trendlines",
+    "title": "Trend Lines",
+    "descriptions": "Try to find trend lines.",
+    "entry": "./cmd/trendlines",
+    "defaultParameters": [
+      7
+    ]
+  },
+  {
+    "name": "random",
+    "title": "Random Events",
+    "descriptions": "Generates random events based on a given frequency.",
+    "entry": "./cmd/random",
+    "defaultParameters": [
+      0.005
+    ]
   }
 ]
