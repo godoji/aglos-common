@@ -122,7 +122,7 @@ func Evaluate(chart env.MarketSupplier, res *algo.ResultHandler, mem *env.Memory
 			TimeEnd:    chart.Time() + 180*candles.Interval1d,
 			PriceBegin: cluster.Center(),
 			PriceEnd:   cluster.Center(),
-			Style:      "solid",
+			Style:      "solid-segment",
 			Color:      "rgba(255,255,255,0.025)",
 		})
 	}

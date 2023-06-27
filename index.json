@@ -57,10 +57,37 @@
     ]
   },
   {
+    "name": "triple-top",
+    "title": "Triple Top",
+    "descriptions": "Detects triple top patterns.",
+    "entry": "./cmd/triple-top",
+    "defaultParameters": [
+      7
+    ]
+  },
+  {
     "name": "double-bottom",
     "title": "Double Bottom",
     "descriptions": "Detects double bottom patterns.",
     "entry": "./cmd/double-bottom",
+    "defaultParameters": [
+      7
+    ]
+  },
+  {
+    "name": "triple-bottom",
+    "title": "Triple Bottom",
+    "descriptions": "Detects triple bottom patterns.",
+    "entry": "./cmd/triple-bottom",
+    "defaultParameters": [
+      7
+    ]
+  },
+  {
+    "name": "head-and-shoulders",
+    "title": "Head and Shoulders",
+    "descriptions": "Detects head and shoulders patterns.",
+    "entry": "./cmd/head-and-shoulders",
     "defaultParameters": [
       7
     ]
